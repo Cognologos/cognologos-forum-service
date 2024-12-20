@@ -3,8 +3,8 @@ services:
     image: postgres:16-alpine
 
     environment:
-      POSTGRES_USER: user
-      POSTGRES_DB: db
+      POSTGRES_USER: forum_user
+      POSTGRES_DB: forum
       POSTGRES_PASSWORD: password
 
     ports:

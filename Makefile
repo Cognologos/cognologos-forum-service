@@ -22,7 +22,7 @@ migration:
 
 .PHONY: dev-compose
 dev-compose:
-	docker compose -p cognologos-forum-service -f deployment/docker-compose.local.yml up -d --build --remove-orphans
+	docker-compose -p cognologos-forum-service -f deployment/docker-compose.local.yml up -d --build --remove-orphans
 
 .PHONY: dev-destroy
 dev-destroy:
