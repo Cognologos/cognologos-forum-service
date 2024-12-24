@@ -1,11 +1,8 @@
 from .abc import AbstractModel
-from .categories import CategoryModel
-from .comments import CommentModel
-
-# from .comment_reaction import CommentReaction
+from .category import CategoryModel
+from .comment import CommentModel
+from .post import PostModel
 from .post_reaction import PostReactionModel
-from .posts import PostModel
-from .user import UserModel
 
 
 __all__ = [
@@ -13,7 +10,5 @@ __all__ = [
     "CategoryModel",
     "CommentModel",
     "PostModel",
-    "UserModel",
-    # "CommentReaction",
     "PostReactionModel",
 ]

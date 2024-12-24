@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, Integer, Text, func
+from sqlalchemy import DateTime, ForeignKey, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .abc import AbstractModel
@@ -15,7 +15,7 @@ class CommentModel(AbstractModel):
     __tablename__ = "comments"
 
     id: Mapped[int] = mapped_column("id", Integer(), primary_key=True, autoincrement=True)
-    content: Mapped[str] = mapped_column(Text)
+    content: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
