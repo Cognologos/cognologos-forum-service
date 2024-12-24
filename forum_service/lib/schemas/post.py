@@ -6,7 +6,7 @@ from .abc import BaseSchema
 class PostCreateSchema(BaseSchema):
     title: str
     content: str
-    author_id: int
+    user_id: int
     category_id: int
 
 
