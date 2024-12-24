@@ -1,18 +1,19 @@
 from .abc import AbstractModel
-from .user import User
-from .posts import Post
-from .comments import Comment
-from .categories import Category
+from .categories import CategoryModel
+from .comments import CommentModel
+
 # from .comment_reaction import CommentReaction
-from .post_reaction import PostReaction
+from .post_reaction import PostReactionModel
+from .posts import PostModel
+from .user import UserModel
 
 
 __all__ = [
     "AbstractModel",
-    "Category",
-    "Comment",
-    "Post",
-    "User",
+    "CategoryModel",
+    "CommentModel",
+    "PostModel",
+    "UserModel",
     # "CommentReaction",
-    "PostReaction"
+    "PostReactionModel",
 ]
