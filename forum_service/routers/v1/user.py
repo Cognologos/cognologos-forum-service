@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from forum_service.core.dependencies.fastapi import db_session
+from forum_service.lib.db.user import create_user_db, get_user_by_username_or_email
 from forum_service.lib.schemas.users import UserCreate, UserResponse
-from forum_service.lib.db.user import get_user_by_username_or_email, create_user_db
+
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
