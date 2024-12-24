@@ -1,11 +1,14 @@
 from typing import Annotated, Any, AsyncGenerator
 
 from fastapi import Depends, Request
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from httpx import AsyncClient
 from redis.asyncio import ConnectionPool, Redis as AbstractRedis
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 from forum_service.core.config import AppConfig
+from forum_service.lib.schemas.user import UserSchema
 
 from . import constructors as app_depends
 
@@ -57,5 +60,17 @@ async def redis_conn(
         raise RuntimeError("Redis session not closed (redis dependency generator is not closed).")
 
 
+async def user_dependency(
+    config: Annotated[AppConfig, Depends(app_config_stub)],
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(HTTPBearer())],
+):
+    async with AsyncClient() as client:
+        headers = {"Authorization": f"Bearer {credentials.credentials}"}
+        response = await client.get(f"{config.services.auth_url}/api/v1/users/me", headers=headers)
+        response.raise_for_status()
+        return UserSchema.model_construct(**response.json())
+
+
+UserDependency = Annotated[UserSchema, Depends(user_dependency)]
 DatabaseDependency = Annotated[AsyncSession, Depends(db_session)]
 RedisDependency = Annotated[AbstractRedis, Depends(redis_conn)]
