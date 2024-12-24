@@ -9,7 +9,6 @@ from .abc import AbstractModel
 
 if TYPE_CHECKING:
     from .post import PostModel
-    from .user import UserModel
 
 
 class CommentModel(AbstractModel):
@@ -21,9 +20,8 @@ class CommentModel(AbstractModel):
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user_id: Mapped[int]
     likes: Mapped[int] = mapped_column(default=0)
     dislikes: Mapped[int] = mapped_column(default=0)
 
     post: Mapped["PostModel"] = relationship("PostModel", back_populates="comments")
-    author: Mapped["UserModel"] = relationship("UserModel", back_populates="comments")

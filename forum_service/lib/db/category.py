@@ -1,12 +1,12 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from forum_service.lib.models.categories import Category
+from forum_service.lib.models.categories import CategoryModel
 from forum_service.lib.schemas.categories import CategoryCreate
 
 
-async def create_category_db(category: CategoryCreate, session: AsyncSession) -> Category:
-    new_category = Category(name=category.name, description=category.description)
+async def create_category_db(category: CategoryCreate, session: AsyncSession) -> CategoryModel:
+    new_category = CategoryModel(name=category.name, description=category.description)
     session.add(new_category)
     try:
         await session.commit()
@@ -17,8 +17,8 @@ async def create_category_db(category: CategoryCreate, session: AsyncSession) ->
         raise
 
 
-async def update_category_db(category_id: int, category: CategoryCreate, session: AsyncSession) -> Category:
-    db_category = await session.get(Category, category_id)
+async def update_category_db(category_id: int, category: CategoryCreate, session: AsyncSession) -> CategoryModel:
+    db_category = await session.get(CategoryModel, category_id)
     if not db_category:
         return None
 
@@ -34,7 +34,7 @@ async def update_category_db(category_id: int, category: CategoryCreate, session
 
 
 async def delete_category_db(category_id: int, session: AsyncSession) -> bool:
-    db_category = await session.get(Category, category_id)
+    db_category = await session.get(CategoryModel, category_id)
     if not db_category:
         return False
 
