@@ -1,12 +1,13 @@
 from fastapi import APIRouter
-from . import user, posts, comments, categories
+
+from . import category, comment, post
+
 
 router = APIRouter(prefix="/v1")
 
 for i in [
-    user.router,
-    categories.router,
-    posts.router,
-    comments.router,
+    category.router,
+    post.router,
+    comment.router,
 ]:
     router.include_router(i)
