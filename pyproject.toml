@@ -19,6 +19,7 @@ redis = "^5.2.1"
 bcrypt = "^4.2.1"
 greenlet = "^3.1.1"
 httpx = "^0.28.1"
+pyfa-converter-v2 = "^2.0.0rc1"
 
 
 [tool.poetry.group.dev.dependencies]
