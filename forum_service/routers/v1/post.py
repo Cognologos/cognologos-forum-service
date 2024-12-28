@@ -22,3 +22,8 @@ async def get_posts(
     filter: PostFilterRequest = QueryDepends(PostFilterRequest),
 ) -> PostPaginationResponse:
     return await posts_db.get_posts(db, pagination, filter)
+
+
+@router.get("/{post_id}", response_model=PostSchema)
+async def get_post(db: DatabaseDependency, post_id: int) -> PostSchema:
+    return await posts_db.get_post(db, post_id)
