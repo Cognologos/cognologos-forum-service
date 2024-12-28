@@ -32,6 +32,11 @@ class RedisConfig(BaseSettings):
     url: str
 
 
+class ServicesConfig(BaseSettings):
+    auth_url: str
+
+
 class AppConfig(BaseConfig):
     database: DatabaseConfig
     redis: RedisConfig
+    services: ServicesConfig
