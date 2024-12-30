@@ -18,6 +18,6 @@ class PostReactionModel(AbstractModel):
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"), index=True)
     reaction_type: Mapped[str] = mapped_column(String(10))
 
-    post: Mapped["PostModel"] = relationship("PostModel", back_populates="reactions")
+    post: Mapped["PostModel"] = relationship("PostModel", back_populates="post_reaction")
 
     __table_args__ = (UniqueConstraint("post_id", "user_id", name="unique_post_user_reaction"),)

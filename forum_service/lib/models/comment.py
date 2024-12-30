@@ -5,6 +5,7 @@ from sqlalchemy import DateTime, ForeignKey, Integer, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .abc import AbstractModel
+from .comment_reaction import CommentReactionModel
 
 
 if TYPE_CHECKING:
@@ -22,7 +23,7 @@ class CommentModel(AbstractModel):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
     user_id: Mapped[int]
-    likes: Mapped[int] = mapped_column(default=0)
-    dislikes: Mapped[int] = mapped_column(default=0)
-
     post: Mapped["PostModel"] = relationship("PostModel", back_populates="comments")
+    comment_reaction: Mapped[list["CommentReactionModel"]] = relationship(
+        "CommentReactionModel", back_populates="comment"
+    )

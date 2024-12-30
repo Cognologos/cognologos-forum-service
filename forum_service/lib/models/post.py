@@ -28,4 +28,4 @@ class PostModel(AbstractModel):
 
     category: Mapped["CategoryModel"] = relationship("CategoryModel", back_populates="posts")
     comments: Mapped[list["CommentModel"]] = relationship("CommentModel", back_populates="post")
-    reactions: Mapped[list["PostReactionModel"]] = relationship("PostReactionModel", back_populates="post")
+    post_reaction: Mapped[list["PostReactionModel"]] = relationship("PostReactionModel", back_populates="post")
