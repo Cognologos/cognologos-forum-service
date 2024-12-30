@@ -4,6 +4,7 @@ from forum_service.core.dependencies.fastapi import DatabaseDependency, UserDepe
 from forum_service.lib.db import category as category_db
 from forum_service.lib.schemas.category import CategoryCreateSchema, CategorySchema
 
+
 router = APIRouter(tags=["category"], prefix="/category")
 
 
@@ -12,17 +13,13 @@ async def create_category(db: DatabaseDependency, user: UserDependency, schema: 
     return await category_db.create_category(db, user_id=user.id, schema=schema)
 
 
-@router.get("/get_category", response_model=CategorySchema)
+@router.get("/{category_id}", response_model=CategorySchema)
 async def get_category(db: DatabaseDependency, category_id: int) -> CategorySchema:
     return await category_db.get_category(db, category_id=category_id)
 
 
 @router.put("/update_category", response_model=CategorySchema)
-async def update_category(
-        db: DatabaseDependency,
-        category_id: int,
-        schema: CategoryCreateSchema
-) -> CategorySchema:
+async def update_category(db: DatabaseDependency, category_id: int, schema: CategoryCreateSchema) -> CategorySchema:
     return await category_db.update_category(db, category_id=category_id, schema=schema)
 
 

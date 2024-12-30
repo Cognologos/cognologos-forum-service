@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .abc import AbstractModel
 from .post_reaction import PostReactionModel
 
+
 if TYPE_CHECKING:
     from .category import CategoryModel
     from .comment import CommentModel
