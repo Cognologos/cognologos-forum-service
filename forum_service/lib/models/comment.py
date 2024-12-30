@@ -19,6 +19,7 @@ class CommentModel(AbstractModel):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     post_id: Mapped[int] = mapped_column(ForeignKey("posts.id"))
     user_id: Mapped[int]
     likes: Mapped[int] = mapped_column(default=0)

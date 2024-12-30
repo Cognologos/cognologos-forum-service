@@ -7,7 +7,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .abc import AbstractModel
 from .post_reaction import PostReactionModel
 
-
 if TYPE_CHECKING:
     from .category import CategoryModel
     from .comment import CommentModel
@@ -22,6 +21,7 @@ class PostModel(AbstractModel):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     user_id: Mapped[int]
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
 

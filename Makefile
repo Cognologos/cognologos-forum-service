@@ -26,4 +26,4 @@ dev-compose:
 
 .PHONY: dev-destroy
 dev-destroy:
-	docker compose -p cognologos-forum-service -f deployment/docker-compose.local.yml down -v --remove-orphans
+	docker-compose -p cognologos-forum-service -f deployment/docker-compose.local.yml down -v --remove-orphans
