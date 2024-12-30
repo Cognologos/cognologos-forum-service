@@ -79,3 +79,21 @@ async def delete_category(
     category_model.deleted_at = datetime.now(timezone.utc)
 
     await db.flush()
+
+
+async def update_category(
+        db: AsyncSession,
+        *,
+        category_id: int,
+        schema: CategoryCreateSchema,
+) -> CategorySchema:
+    category_model = await get_category_model_by_id(db, category_id=category_id)
+
+    if category_model.name != schema.name:
+        await raise_for_category_name(db, schema.name)
+
+    for field, value in schema.model_dump().items():
+        setattr(category_model, field, value)
+
+    await db.flush()
+    return CategorySchema.model_construct(**category_model.to_dict())

@@ -4,7 +4,6 @@ from forum_service.core.dependencies.fastapi import DatabaseDependency
 from forum_service.lib.db import category as category_db
 from forum_service.lib.schemas.category import CategoryCreateSchema, CategorySchema
 
-
 router = APIRouter(tags=["category"], prefix="/category")
 
 
@@ -18,6 +17,15 @@ async def get_category(db: DatabaseDependency, category_id: int) -> CategorySche
     return await category_db.get_category(db, category_id=category_id)
 
 
-@router.delete("/get_category", status_code=204)
+@router.put("/update_category", response_model=CategorySchema)
+async def update_category(
+        db: DatabaseDependency,
+        category_id: int,
+        schema: CategoryCreateSchema
+) -> CategorySchema:
+    return await category_db.update_category(db, category_id=category_id, schema=schema)
+
+
+@router.delete("/delete_category", status_code=204)
 async def delete_category(db: DatabaseDependency, category_id: int) -> None:
     return await category_db.delete_category(db, category_id=category_id)
