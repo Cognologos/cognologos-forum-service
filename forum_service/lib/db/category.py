@@ -26,20 +26,6 @@ async def create_category(db: AsyncSession, *, user_id: int, schema: CategoryCre
     return CategorySchema.model_construct(**category_model.to_dict())
 
 
-async def get_category_model(
-        db: AsyncSession,
-        *,
-        name: str,
-) -> CategoryModel:
-    query = select(CategoryModel).where(CategoryModel.name == name)
-    result = (await db.execute(query)).scalar_one_or_none()
-    if result is None:
-        raise CategoryNotFoundException
-    if result.deleted_at is not None:
-        raise CategoryNotFoundException
-    return result
-
-
 async def get_category_model_by_id(
         db: AsyncSession,
         *,
