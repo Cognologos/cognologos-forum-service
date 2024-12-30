@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from forum_service.core.dependencies.fastapi import DatabaseDependency
+from forum_service.core.dependencies.fastapi import DatabaseDependency, UserDependency
 from forum_service.lib.db import category as category_db
 from forum_service.lib.schemas.category import CategoryCreateSchema, CategorySchema
 
@@ -8,8 +8,8 @@ router = APIRouter(tags=["category"], prefix="/category")
 
 
 @router.post("/", response_model=CategorySchema)
-async def create_category(db: DatabaseDependency, schema: CategoryCreateSchema) -> CategorySchema:
-    return await category_db.create_category(db, schema=schema)
+async def create_category(db: DatabaseDependency, user: UserDependency, schema: CategoryCreateSchema) -> CategorySchema:
+    return await category_db.create_category(db, user_id=user.id, schema=schema)
 
 
 @router.get("/get_category", response_model=CategorySchema)

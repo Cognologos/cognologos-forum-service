@@ -18,16 +18,9 @@ async def raise_for_category_name(db: AsyncSession, name: str) -> None:
         raise CategoryNameAlreadyExistsException(name=name)
 
 
-async def create_category(
-        db: AsyncSession,
-        *,
-        schema: CategoryCreateSchema,
-) -> CategorySchema:
+async def create_category(db: AsyncSession, *, user_id: int, schema: CategoryCreateSchema) -> CategorySchema:
     await raise_for_category_name(db, schema.name)
-
-    category_model = CategoryModel(
-        **schema.model_dump()
-    )
+    category_model = CategoryModel(**schema.model_dump(exclude={"user_id"}), user_id=user_id)
     db.add(category_model)
     await db.flush()
     return CategorySchema.model_construct(**category_model.to_dict())
