@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from forum_service.core.exceptions.comment import CommentNotFoundException
+from forum_service.core.exceptions.comment import CommentNotFoundException, UserNotAuthorError
 from forum_service.lib.models.comment import CommentModel
 from forum_service.lib.schemas.comment import CommentCreateSchema, CommentSchema
 
@@ -38,27 +38,34 @@ async def get_comment(
     return CommentSchema.model_construct(**comment_model.to_dict())
 
 
-async def delete_comment(
-    db: AsyncSession,
-    *,
-    comment_id: int,
-) -> None:
-    comment_model = await get_comment_model_by_id(db, comment_id=comment_id)
-    comment_model.deleted_at = datetime.now(timezone.utc)
-
-    await db.flush()
-
-
 async def update_comment(
     db: AsyncSession,
     *,
+    user_id: int,
     comment_id: int,
     schema: CommentCreateSchema,
 ) -> CommentSchema:
     comment_model = await get_comment_model_by_id(db, comment_id=comment_id)
+
+    if comment_model.user_id != user_id:
+        raise UserNotAuthorError
 
     for field, value in schema.model_dump().items():
         setattr(comment_model, field, value)
 
     await db.flush()
     return CommentSchema.model_construct(**comment_model.to_dict())
+
+
+async def delete_comment(
+    db: AsyncSession,
+    *,
+    user_id: int,
+    comment_id: int,
+) -> None:
+    comment_model = await get_comment_model_by_id(db, comment_id=comment_id)
+    if comment_model.user_id != user_id:
+        raise UserNotAuthorError
+    comment_model.deleted_at = datetime.now(timezone.utc)
+
+    await db.flush()

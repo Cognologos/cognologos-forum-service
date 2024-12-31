@@ -3,7 +3,11 @@ from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from forum_service.core.exceptions.category import CategoryNameAlreadyExistsException, CategoryNotFoundException
+from forum_service.core.exceptions.category import (
+    CategoryNameAlreadyExistsException,
+    CategoryNotFoundException,
+    UserNotAuthorError,
+)
 from forum_service.lib.models import CategoryModel
 from forum_service.lib.schemas.category import CategoryCreateSchema, CategorySchema
 
@@ -52,9 +56,14 @@ async def get_category(
 async def delete_category(
     db: AsyncSession,
     *,
+    user_id: int,
     category_id: int,
 ) -> None:
     category_model = await get_category_model_by_id(db, category_id=category_id)
+
+    if category_model.user_id != user_id:
+        raise UserNotAuthorError
+
     category_model.deleted_at = datetime.now(timezone.utc)
 
     await db.flush()
@@ -63,10 +72,13 @@ async def delete_category(
 async def update_category(
     db: AsyncSession,
     *,
+    user_id: int,
     category_id: int,
     schema: CategoryCreateSchema,
 ) -> CategorySchema:
     category_model = await get_category_model_by_id(db, category_id=category_id)
+    if category_model.user_id != user_id:
+        raise UserNotAuthorError
 
     if category_model.name != schema.name:
         await raise_for_category_name(db, schema.name)

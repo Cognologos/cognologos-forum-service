@@ -30,10 +30,12 @@ async def get_post(db: DatabaseDependency, post_id: int) -> PostSchema:
 
 
 @router.put("/update_post", response_model=PostSchema)
-async def update_post(db: DatabaseDependency, post_id: int, schema: PostCreateSchema) -> PostSchema:
-    return await posts_db.update_post(db, post_id=post_id, schema=schema)
+async def update_post(
+    db: DatabaseDependency, user: UserDependency, post_id: int, schema: PostCreateSchema
+) -> PostSchema:
+    return await posts_db.update_post(db, user_id=user.id, post_id=post_id, schema=schema)
 
 
 @router.delete("/delete_post", status_code=204)
-async def delete_post(db: DatabaseDependency, post_id: int) -> None:
-    return await posts_db.delete_post(db, post_id=post_id)
+async def delete_post(db: DatabaseDependency, user: UserDependency, post_id: int) -> None:
+    return await posts_db.delete_post(db, user_id=user.id, post_id=post_id)

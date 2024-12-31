@@ -20,13 +20,15 @@ async def get_comment(db: DatabaseDependency, comment_id: int) -> CommentSchema:
 
 
 @router.put("/update_comment", response_model=CommentSchema)
-async def update_comment(db: DatabaseDependency, comment_id: int, schema: CommentCreateSchema) -> CommentSchema:
-    return await comments_db.update_comment(db, comment_id=comment_id, schema=schema)
+async def update_comment(
+    db: DatabaseDependency, user: UserDependency, comment_id: int, schema: CommentCreateSchema
+) -> CommentSchema:
+    return await comments_db.update_comment(db, user_id=user.id, comment_id=comment_id, schema=schema)
 
 
 @router.delete("/delete_comment", status_code=204)
-async def delete_comment(db: DatabaseDependency, comment_id: int) -> None:
-    return await comments_db.delete_comment(db, comment_id=comment_id)
+async def delete_comment(db: DatabaseDependency, user: UserDependency, comment_id: int) -> None:
+    return await comments_db.delete_comment(db, user_id=user.id, comment_id=comment_id)
 
 
 @router.post("/{comment_id}/like", status_code=204)

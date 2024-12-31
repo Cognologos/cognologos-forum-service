@@ -17,3 +17,9 @@ class CategoryNameAlreadyExistsException(CategoryException, ConflictException):
     auto_additional_info_fields = ["name"]
 
     detail = "Category with name {name} already exists, please use another name"
+
+
+class UserNotAuthorError(CategoryException, ConflictException):
+    """User is not the author of the category."""
+
+    detail = "You are not the author of this category"

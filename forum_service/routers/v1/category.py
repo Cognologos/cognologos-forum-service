@@ -19,10 +19,12 @@ async def get_category(db: DatabaseDependency, category_id: int) -> CategorySche
 
 
 @router.put("/update_category", response_model=CategorySchema)
-async def update_category(db: DatabaseDependency, category_id: int, schema: CategoryCreateSchema) -> CategorySchema:
-    return await category_db.update_category(db, category_id=category_id, schema=schema)
+async def update_category(
+    db: DatabaseDependency, user: UserDependency, category_id: int, schema: CategoryCreateSchema
+) -> CategorySchema:
+    return await category_db.update_category(db, user_id=user.id, category_id=category_id, schema=schema)
 
 
 @router.delete("/delete_category", status_code=204)
-async def delete_category(db: DatabaseDependency, category_id: int) -> None:
-    return await category_db.delete_category(db, category_id=category_id)
+async def delete_category(db: DatabaseDependency, user: UserDependency, category_id: int) -> None:
+    return await category_db.delete_category(db, user_id=user.id, category_id=category_id)

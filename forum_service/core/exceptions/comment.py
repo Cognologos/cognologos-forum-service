@@ -17,3 +17,9 @@ class CommentNameAlreadyExistsException(CommentException, ConflictException):
     auto_additional_info_fields = ["name"]
 
     detail = "Comment with name {name} already exists, please use another name"
+
+
+class UserNotAuthorError(CommentException, ConflictException):
+    """User is not the author of the comment."""
+
+    detail = "You are not the author of this comment"

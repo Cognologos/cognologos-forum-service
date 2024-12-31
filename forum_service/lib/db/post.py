@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from forum_service.core.exceptions.post import PostNotFoundException
+from forum_service.core.exceptions.post import PostNotFoundException, UserNotAuthorError
 from forum_service.lib.models.post import PostModel
 from forum_service.lib.schemas.pagination import PaginationRequest
 from forum_service.lib.schemas.post import PostCreateSchema, PostFilterRequest, PostPaginationResponse, PostSchema
@@ -57,11 +57,14 @@ async def create_post(db: AsyncSession, *, user_id: int, schema: PostCreateSchem
 async def update_post(
     db: AsyncSession,
     *,
+    user_id: int,
     post_id: int,
     schema: PostCreateSchema,
 ) -> PostSchema:
-    post_model = await get_post_model_by_id(db, post_id=post_id)
 
+    post_model = await get_post_model_by_id(db, post_id=post_id)
+    if post_model.user_id != user_id:
+        raise UserNotAuthorError
     for field, value in schema.model_dump().items():
         setattr(post_model, field, value)
 
@@ -72,9 +75,12 @@ async def update_post(
 async def delete_post(
     db: AsyncSession,
     *,
+    user_id: int,
     post_id: int,
 ) -> None:
     post_model = await get_post_model_by_id(db, post_id=post_id)
+    if post_model.user_id != user_id:
+        raise UserNotAuthorError
     post_model.deleted_at = datetime.now(timezone.utc)
 
     await db.flush()

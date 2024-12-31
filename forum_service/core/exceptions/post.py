@@ -17,3 +17,9 @@ class PostNameAlreadyExistsException(PostException, ConflictException):
     auto_additional_info_fields = ["name"]
 
     detail = "Post with name {name} already exists, please use another name"
+
+
+class UserNotAuthorError(PostException, ConflictException):
+    """User is not the author of the post."""
+
+    detail = "You are not the author of this post"
